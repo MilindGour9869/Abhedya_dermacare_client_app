@@ -28,8 +28,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Map<String,String> treatment_list = {
 
-    'Acne' : 's'
-
+    'All Skin' : 'images/all_skin.webp' ,
+    'Allergies' : 'images/allergies.webp' ,
+    'Chemical Peeling' : 'images/chemical_peeling.jpg' ,
+    'Triplle Wave Length Diode Laser' : 'images/laser.jpg' ,
+    'MICROBLADING , MICROPIGMENT' : 'images/face_lift.webp' ,
+    'Hair Transplant' : 'images/hair_transplant.webp' ,
+    'IONTOPHORESIS' : 'images/sweating.webp' ,
+    'PRP , ACUGEL TREATMENT' : 'images/prp.jpg' ,
+    'Psoriasis' : 'images/psoriasis.jpg' ,
+    'ND YAG LASER' : 'images/tattoo.jpg' ,
+    'MNRF' : 'images/MNRF.jpg' ,
+    'BRIDE / GROOM Beauty Treatment Packages' : 'images/bride_groom.webp'
 
   };
 
@@ -38,9 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void set_treatment_list(){
 
-    search_treatment_list = treatment_list.keys.toList();
-    all_treatment_list = treatment_list.keys.toList();
+   setState(() {
+     search_treatment_list = treatment_list.keys.toList();
+     all_treatment_list = treatment_list.keys.toList();
 
+   });
   }
 
 
@@ -57,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
       profile_url = value['profile_url'];
       practice1 = value['practice1'];
       practice2 = value['practice2'];
+
+
 
 
 
@@ -83,106 +97,145 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     future();
+    set_treatment_list();
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            child: Column(
-              children: [
+      resizeToAvoidBottomInset: false,
+      body: Padding(
+        padding:  EdgeInsets.only(left: 3.w),
+        child: Column(
+          children: [
+            Container(
 
-                Image.network(
-                  profile_url ,
-                  height: 40.w,
-                  width: 40.w,
-                  fit: BoxFit.fill,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircleAvatar(
-                        radius: 20.w,
-                        backgroundColor: Colors.white70,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes
-                                : null,
+              alignment: Alignment.centerLeft,
+              child: Column(
+
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+
+                  profile_url==null?CircleAvatar(
+                    backgroundColor: AppTheme.grey,
+                    radius: 20.w,
+                    child: Icon(
+                      Icons.person_add_outlined,
+                      color: Colors.white,
+                    ),
+
+
+                  ):ClipOval(
+                    child: Image.network(
+                      profile_url ,
+                      height: 40.w,
+                      width: 40.w,
+                      fit: BoxFit.fill,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircleAvatar(
+                            radius: 20.w,
+                            backgroundColor: Colors.white70,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes
+                                    : null,
+                              ),
+                            ),
                           ),
+                        );
+                      },
+                    ),
+                  ),
+
+
+
+                  Text(practice1),
+                  Text(practice2),
+
+                ],
+              ),
+            ),
+
+            Container(
+              margin: EdgeInsets.only(bottom: 3.h),
+
+              height: 6.h,
+
+              decoration: BoxDecoration(
+                  color: AppTheme.notWhite,
+                  borderRadius: BorderRadius.circular(10)),
+              child: TextField(
+
+                controller: search_txt,
+
+
+
+
+
+                onChanged: onItemChanged,
+                decoration: InputDecoration(
+                  fillColor: Colors.grey,
+                    isDense: true,
+                    isCollapsed: true,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 7.w , vertical: 1.3.h ),
+                    border: InputBorder.none,
+                    hintText: 'search',
+                    hintStyle:  AppTheme.k_search_text_style
+                ),
+                keyboardType: TextInputType.name,
+              ),
+            ),
+
+            SizedBox(
+
+              height: 350,
+
+
+              child: SingleChildScrollView(
+
+                child: Wrap(
+
+                  runSpacing: 3.w,
+                  spacing: 3.w,
+
+                  children: search_treatment_list.map<Widget>((e) {
+
+
+
+
+                    return SizedBox(
+                      height: 40.w,
+                      width: 40.w,
+                      child: Card(
+                        color: AppTheme.green,
+                        child: Column(
+                         children: [
+                           Image.asset(treatment_list[e]  ,
+                             height: 20.w,
+                             width: 20.w,),
+
+                           FittedBox(
+
+                               child: Text(e)),
+                         ],
                         ),
                       ),
                     );
-                  },
+                  }).toList(),
                 ),
-
-                Text(practice1),
-                Text(practice2),
-
-              ],
-            ),
-          ),
-
-          Container(
-            margin: EdgeInsets.only(bottom: 3.h),
-
-            height: 6.h,
-
-            decoration: BoxDecoration(
-                color: AppTheme.notWhite,
-                borderRadius: BorderRadius.circular(10)),
-            child: TextField(
-
-              controller: search_txt,
-
-
-
-              onChanged: onItemChanged,
-              decoration: InputDecoration(
-                  isDense: true,
-                  isCollapsed: true,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 7.w , vertical: 1.3.h ),
-                  border: InputBorder.none,
-                  hintText: 'search',
-                  hintStyle:  AppTheme.k_search_text_style
-
-
-
-
-
               ),
-              keyboardType: TextInputType.name,
-            ),
-          ),
-
-          Wrap(
-
-            children: search_treatment_list.map<Widget>((e) {
-
-              return Card(
-                color: AppTheme.green,
-                child: Column(
-                 children: [
-                   Image.asset(treatment_list[e]  ,
-                     height: 10.w,
-                     width: 10.w,),
-
-                   Text(e),
+            )
 
 
-                 ],
-
-
-                ),
-              );
-            }).toList(),
-          )
-
-
-        ],
+          ],
+        ),
       ),
     );
   }
